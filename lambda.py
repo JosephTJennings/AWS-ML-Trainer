@@ -54,7 +54,8 @@ def train_knn_regressor(X_train, y_train):
 # Function to query the database and fetch data
 def query_database(db_url, username, password, fields, table):
     # Create SQLAlchemy engine with username and password
-    engine = create_engine(db_url, connect_args={'user': username, 'password': password})
+    constr_url = "mysql+mysqlconnector://" + username + ":" + password + "@" + db_url
+    engine = create_engine(constr_url, connect_args={'user': username, 'password': password})
     
     # Reflect the existing database schema into the MetaData object
     metadata = MetaData()
