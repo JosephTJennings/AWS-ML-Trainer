@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Trainer - Result</title>
+</head>
+<body>
+    <h1>ML Model Trainer - Result</h1>
+    <div id="result"></div>
+
+    <script>
+        // Extract parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const modelType = urlParams.get('model_type');
+        const chosenModel = urlParams.get('chosen_model');
+        const f1Score = urlParams.get('f1_score');
+        const predictions = urlParams.get('predictions');
+        const trueValues = urlParams.get('true_values');
+
+        // Display the result
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = `
+            <p><strong>Message:</strong> ${message}</p>
+            <p><strong>Model Type:</strong> ${modelType}</p>
+            <p><strong>Chosen Model:</strong> ${chosenModel}</p>
+            <p><strong>F1 Score:</strong> ${f1Score}</p>
+            <p><strong>Predictions:</strong> ${predictions}</p>
+            <p><strong>True Values:</strong> ${trueValues}</p>
+        `;
+    </script>
+</body>
+</html>
