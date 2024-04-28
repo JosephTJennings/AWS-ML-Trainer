@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVC, SVR
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table, select
 
 # Define function to train random forest classifier
 def train_random_forest_classifier(X_train, y_train):
@@ -56,12 +56,20 @@ def query_database(db_url, username, password, fields, table):
     # Create SQLAlchemy engine with username and password
     engine = create_engine(db_url, connect_args={'user': username, 'password': password})
     
+    # Reflect the existing database schema into the MetaData object
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    target_table = metadata.tables[table]
+
+    # Build the select statement using individual columns
+    columns = [target_table.c[field.strip()] for field in fields.split(',')]
+    stmt = select(*columns)
+
     # Fetch data using SQLAlchemy
     try:
-        conn = engine.connect()
-        query = conn.execute("SELECT {} FROM {}".format(','.join(fields), table))
-        data = pd.DataFrame(query.fetchall(), columns=fields)
-        conn.close()
+        with engine.connect() as conn:
+            result = conn.execute(stmt)
+            data = pd.DataFrame(result.fetchall(), columns=[c.name for c in columns])
     except Exception as e:
         raise e
     
