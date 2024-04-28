@@ -8,8 +8,30 @@
 <body>
     <h1>ML Model Trainer</h1>
     <form id="mlForm">
-        <label for="dbURL">Database URL or API Endpoint:</label>
-        <input type="text" id="dbURL" name="dbURL" required><br><br>
+        <label for="source">Data Source:</label>
+        <select id="source" name="source">
+            <option value="database">Database</option>
+            <option value="api">API Endpoint</option>
+        </select><br><br>
+
+        <div id="dbInput" style="display:none;">
+            <label for="dbURL">Database URL:</label>
+            <input type="text" id="dbURL" name="dbURL"><br><br>
+            
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+            
+            <label for="table">Table Name:</label>
+            <input type="text" id="table" name="table"><br><br>
+        </div>
+        
+        <div id="apiInput" style="display:none;">
+            <label for="apiURL">API Endpoint URL:</label>
+            <input type="text" id="apiURL" name="apiURL"><br><br>
+        </div>
         
         <label for="fields">Fields to train the model on:</label>
         <input type="text" id="fields" name="fields" required><br><br>
@@ -22,16 +44,11 @@
         
         <label for="model">Choose Model:</label>
         <select id="model" name="model">
-            <!-- Initial options -->
-            <option value="random_forest">Random Forest</option>
-            <option value="linear_regression">Linear Regression</option>
-            <option value="svm">Support Vector Machine</option>
-            <option value="knn">K-Nearest Neighbors</option>
+            <!-- Options will be dynamically added here using JavaScript -->
         </select><br><br>
         
         <input type="submit" value="Train Model">
     </form>
-
-    <script src="frontend.js"></script>
+    <script src="core.js"></script>
 </body>
 </html>

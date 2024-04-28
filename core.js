@@ -1,6 +1,24 @@
 // Call updateModels initially and whenever model type is changed
 document.getElementById('type').addEventListener('change', updateModels);
+document.getElementById('source').addEventListener('change', toggleInputs); // Add event listener for source change
 updateModels(); // Initial call to populate models based on default selection
+
+function toggleInputs() {
+    const source = document.getElementById('source').value;
+    const dbInput = document.getElementById('dbInput');
+    const apiInput = document.getElementById('apiInput');
+
+    // Hide both inputs by default
+    dbInput.style.display = 'none';
+    apiInput.style.display = 'none';
+
+    // Show the appropriate input based on the selected source
+    if (source === 'database') {
+        dbInput.style.display = 'block';
+    } else if (source === 'api') {
+        apiInput.style.display = 'block';
+    }
+}
 
 document.getElementById("mlForm").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -10,6 +28,8 @@ document.getElementById("mlForm").addEventListener("submit", function(event) {
     formData.forEach((value, key) => {
         requestData[key] = value;
     });
+
+    console.log(JSON.stringify(requestData));
 
     fetch('https://m4dwnmse47rg4csxsvk2kph3de0sgady.lambda-url.us-east-2.on.aws/', {
         method: 'POST',
@@ -28,7 +48,6 @@ document.getElementById("mlForm").addEventListener("submit", function(event) {
     });
 });
 
-
 // Function to show/hide model options based on model type selection
 function updateModels() {
     const modelType = document.getElementById('type').value;
@@ -39,8 +58,11 @@ function updateModels() {
     // Clear existing options
     modelSelect.innerHTML = '';
 
+    // Convert model type to lowercase for case-insensitive comparison
+    const lowercaseModelType = modelType.toLowerCase();
+
     // Add options based on model type
-    const availableModels = modelType === 'classification' ? classificationModels : regressionModels;
+    const availableModels = lowercaseModelType === 'classification' ? classificationModels : regressionModels;
     availableModels.forEach(model => {
         const option = document.createElement('option');
         option.value = model;
