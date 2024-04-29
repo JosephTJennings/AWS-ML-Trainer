@@ -31,7 +31,7 @@ document.getElementById("mlForm").addEventListener("submit", function(event) {
 
     console.log(JSON.stringify(requestData));
 
-    fetch('https://m4dwnmse47rg4csxsvk2kph3de0sgady.lambda-url.us-east-2.on.aws/', {
+    fetch('https://gbcllehp7b.execute-api.us-east-2.amazonaws.com/Prod-stage/train', {
         method: 'POST',
         body: JSON.stringify(requestData),
         headers: {

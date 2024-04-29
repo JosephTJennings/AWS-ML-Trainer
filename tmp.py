@@ -1,36 +1,28 @@
-from sqlalchemy import create_engine, MetaData, Table, select, column
-import pandas as pd
+import json
+import lambdaFunc  # Assuming your lambda file is named lambda_file.py
 
-def query_database(db_url, username, password, fields, table):
-    # Create SQLAlchemy engine with username and password
-    constr_url = "mysql+mysqlconnector://" + username + ":" + password + "@" + db_url
-    engine = create_engine(constr_url, connect_args={'user': username, 'password': password})
-    
-    # Reflect the existing database schema into the MetaData object
-    metadata = MetaData()
-    metadata.reflect(bind=engine)
-    target_table = metadata.tables[table]
-
-    # Build the select statement using individual columns
-    columns = [target_table.c[field.strip()] for field in fields.split(',')]
-    stmt = select(*columns)
-
-    # Fetch data using SQLAlchemy
-    try:
-        with engine.connect() as conn:
-            result = conn.execute(stmt)
-            data = pd.DataFrame(result.fetchall(), columns=[c.name for c in columns])
-    except Exception as e:
-        raise e
-    
-    return data
 def main():
-    db_url = "mltrainerdb.cbeowqykkubi.us-east-2.rds.amazonaws.com:3306/MLdatasets"
-    username = "admin"
-    password = "password"
-    fields = "optionsExpire,strikePrice,volume,delta,gamma,iv,rho"
-    table_name = "options"
-    print(query_database(db_url, username, password, fields, table_name))
+    event = {
+        'dbURL': "mltrainerdb.cbeowqykkubi.us-east-2.rds.amazonaws.com:3306/MLdatasets",
+        'username': "admin",
+        'password': "password",
+        'fields': "optionsExpire,strikePrice,volume,delta,gamma,iv,rho,inTheMoney",
+        'table': "options",
+        'type': 'classification',  # or 'regression'
+        'model': 'random_forest',   # or 'linear_regression', 'svm', 'knn'
+        'target': 'inTheMoney'   # Replace 'target_column' with your actual target column name
+    }
+    
+    # Convert event to JSON format
+    event_json = json.dumps(event)
+    
+    # Simulate Lambda invocation
+    context = None  # Assuming no context is required for your lambda function
+    response = lambdaFunc.lambda_handler(json.loads(event_json), context)
+    
+    # Print the response from the lambda function
+    print(response)
 
-# Now you have your data in the 'data' DataFrame
-main()
+# Call the main function to test your lambda file
+if __name__ == "__main__":
+    main()
