@@ -9,45 +9,44 @@ from sklearn.svm import SVC, SVR
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sqlalchemy import create_engine, MetaData, Table, select
 
-# Define function to train random forest classifier
 def train_random_forest_classifier(X_train, y_train):
-    model = RandomForestClassifier()
+    n_estimators = 100 if len(X_train) > 1000 else 50
+    model = RandomForestClassifier(n_estimators=n_estimators)
     model.fit(X_train, y_train)
     return model
 
-# Define function to train random forest regressor
 def train_random_forest_regressor(X_train, y_train):
-    model = RandomForestRegressor()
+    n_estimators = 100 if len(X_train) > 1000 else 50
+    model = RandomForestRegressor(n_estimators=n_estimators)
     model.fit(X_train, y_train)
     return model
 
-# Define function to train linear regression model
 def train_linear_regression(X_train, y_train):
     model = LinearRegression()
     model.fit(X_train, y_train)
     return model
 
-# Define function to train SVM classifier
 def train_svm_classifier(X_train, y_train):
-    model = SVC()
+    kernel = 'rbf' if len(X_train) > 1000 else 'linear'
+    model = SVC(kernel=kernel)
     model.fit(X_train, y_train)
     return model
 
-# Define function to train SVM regressor
 def train_svm_regressor(X_train, y_train):
-    model = SVR()
+    kernel = 'rbf' if len(X_train) > 1000 else 'linear'
+    model = SVR(kernel=kernel)
     model.fit(X_train, y_train)
     return model
 
-# Define function to train KNN classifier
 def train_knn_classifier(X_train, y_train):
-    model = KNeighborsClassifier()
+    n_neighbors = 5 if len(X_train) > 1000 else 3
+    model = KNeighborsClassifier(n_neighbors=n_neighbors)
     model.fit(X_train, y_train)
     return model
 
-# Define function to train KNN regressor
 def train_knn_regressor(X_train, y_train):
-    model = KNeighborsRegressor()
+    n_neighbors = 5 if len(X_train) > 1000 else 3
+    model = KNeighborsRegressor(n_neighbors=n_neighbors)
     model.fit(X_train, y_train)
     return model
 
